@@ -22,6 +22,9 @@ sed -i 's/OpenWrt/ImmortalWrt/g' package/kernel/mac80211/files/lib/wifi/mac80211
 sed -i 's/ImmortalWrt-2.4/ImmortalWrt-2.4G/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 sed -i 's/ImmortalWrt-5.8/ImmortalWrt-5G/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 
-# 7. 清理可能引起冲突的重复包
+# 7. 拉取 daed 源码到 package/daed
+git clone --depth 1 https://github.com/wkccd/luci-app-daed-runfiles.git package/daed
+
+# 8. 清理可能导致冲突的旧版重复依赖
 rm -rf feeds/packages/net/v2ray-geodata
 rm -rf feeds/packages/net/mosdns

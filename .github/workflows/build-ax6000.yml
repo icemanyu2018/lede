@@ -22,7 +22,8 @@ jobs:
           sudo -E apt update
           sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* snap*
           sudo -E apt -y full-upgrade
-          sudo -E apt -y install ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache clang cmake cpio curl device-tree-compiler flex gawk gcc-multilib g++-multilib gettext genisoimage git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool llvm lrzsz msmtp ninja-build p7zip p7zip-full patch pkgconf python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
+          sudo -E apt -y install ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache clang cmake cpio curl device-tree-compiler flex gawk gcc-multilib g++-multilib gettext genisoimage git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool llvm lrzsz msmtp ninja-build p7zip p7zip-full patch pkgconf python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev npm
+          sudo npm install -g pnpm
           sudo -E systemctl daemon-reload
           sudo -E apt -y autoremove --purge
           sudo -E apt clean
@@ -43,9 +44,21 @@ jobs:
 
       - name: Update feeds
         run: |
-          # 引入 Nikki 官方源
-          echo 'src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main' >> ./feeds.conf.default
-          # 引入 微信推送 (Pushbot) 源
+          # 1. 替换 Go 语言环境为最新 24.x（PassWall2 / MosDNS / OpenClash 必需）
+          rm -rf feeds/packages/lang/golang
+          git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
+
+          # 2. 引入 PassWall 2 源码源
+          echo 'src-git passwall2_pkg https://github.com/xiaorouji/openwrt-passwall-packages.git;main' >> ./feeds.conf.default
+          echo 'src-git passwall2_luci https://github.com/xiaorouji/openwrt-passwall2.git;main' >> ./feeds.conf.default
+
+          # 3. 引入 MosDNS 源
+          echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns.git;v5' >> ./feeds.conf.default
+
+          # 4. 引入 OpenClash 源 (vernesong 官方)
+          echo 'src-git openclash https://github.com/vernesong/OpenClash.git;master' >> ./feeds.conf.default
+
+          # 5. 引入 微信推送 (Pushbot) 源
           echo 'src-git pushbot https://github.com/zzsj0928/luci-app-pushbot.git;master' >> ./feeds.conf.default
 
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default

@@ -22,11 +22,8 @@ sed -i 's/OpenWrt/ImmortalWrt/g' package/kernel/mac80211/files/lib/wifi/mac80211
 sed -i 's/ImmortalWrt-2.4/ImmortalWrt-2.4G/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 sed -i 's/ImmortalWrt-5.8/ImmortalWrt-5G/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 
-# 7. 拉取独立单包插件到 package 目录（解决 feeds index 崩溃与找不到路径）
+# 7. 拉取单包插件到 package 目录
+rm -rf package/daed package/passwall2 package/pushbot
 git clone --depth 1 https://github.com/wkccd/luci-app-daed-runfiles.git package/daed
 git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall2.git package/passwall2
 git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot.git package/pushbot
-
-# 8. 清理冲突依赖
-rm -rf feeds/packages/net/v2ray-geodata
-rm -rf feeds/packages/net/mosdns

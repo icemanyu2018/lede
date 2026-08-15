@@ -1,5 +1,3 @@
-# https://github.com/KFERMercer/OpenWrt-CI
-# Adapted for Xiaomi Redmi Router AX6000
 name: Build AX6000 Full Firmware
 
 on:
@@ -45,11 +43,11 @@ jobs:
 
       - name: Update feeds
         run: |
-          # 添加 Nikki 官方源
+          # 引入 Nikki 官方源
           echo 'src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main' >> ./feeds.conf.default
-          # 添加 OpenClash 源 (kenzok8/openwrt-clashoo)
-          echo 'src-git clashoo https://github.com/kenzok8/openwrt-clashoo.git;master' >> ./feeds.conf.default
-          # 添加 微信推送 (Pushbot) 源
+          # 引入 kenzok8/openwrt-clashoo 插件源
+          echo 'src-git clashoo https://github.com/kenzok8/openwrt-clashoo.git;main' >> ./feeds.conf.default
+          # 引入 微信推送 (Pushbot) 源
           echo 'src-git pushbot https://github.com/zzsj0928/luci-app-pushbot.git;master' >> ./feeds.conf.default
 
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default

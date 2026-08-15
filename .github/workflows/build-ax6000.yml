@@ -45,8 +45,6 @@ jobs:
         run: |
           # 引入 Nikki 官方源
           echo 'src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main' >> ./feeds.conf.default
-          # 引入 kenzok8/openwrt-clashoo 插件源
-          echo 'src-git clashoo https://github.com/kenzok8/openwrt-clashoo.git;main' >> ./feeds.conf.default
           # 引入 微信推送 (Pushbot) 源
           echo 'src-git pushbot https://github.com/zzsj0928/luci-app-pushbot.git;master' >> ./feeds.conf.default
 

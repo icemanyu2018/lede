@@ -21,3 +21,7 @@ sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/M
 sed -i 's/OpenWrt/ImmortalWrt/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 sed -i 's/ImmortalWrt-2.4/ImmortalWrt-2.4G/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 sed -i 's/ImmortalWrt-5.8/ImmortalWrt-5G/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
+
+# 7. 清理可能引起冲突的重复包
+rm -rf feeds/packages/net/v2ray-geodata
+rm -rf feeds/packages/net/mosdns

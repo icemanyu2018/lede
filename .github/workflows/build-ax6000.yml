@@ -56,11 +56,13 @@ jobs:
           rm -rf feeds/packages/lang/golang
           git clone --depth 1 https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
 
+          # 3. 运行 DIY 脚本（克隆独立包至 package 目录，以便被 feeds install 完整索引）
+          [ -e diy.sh ] && chmod +x diy.sh && ./diy.sh
+
           ./scripts/feeds install -a
 
-      - name: Load DIY Script & Custom Config
+      - name: Load Custom Config
         run: |
-          [ -e diy.sh ] && chmod +x diy.sh && ./diy.sh
           [ -e ax6000.config ] && cp -f ax6000.config .config
           make defconfig
 

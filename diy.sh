@@ -25,5 +25,5 @@ sed -i 's/ImmortalWrt-5.8/ImmortalWrt-5G/g' package/kernel/mac80211/files/lib/wi
 # 7. 拉取单包插件到 package 目录
 rm -rf package/passwall2 package/daed package/pushbot
 git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall2.git package/passwall2
-git clone --depth 1 https://github.com/wkccd/luci-app-daed-runfiles.git package/daed
+git clone --depth 1 https://github.com/QiuSimons/openwrt-daed.git package/daed
 git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot.git package/pushbot

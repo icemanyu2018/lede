@@ -22,7 +22,11 @@ jobs:
           sudo -E apt update
           sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* snap*
           sudo -E apt -y full-upgrade
-          sudo -E apt -y install ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache clang cmake cpio curl device-tree-compiler flex gawk gcc-multilib g++-multilib gettext genisoimage git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool llvm lrzsz msmtp ninja-build p7zip p7zip-full patch pkgconf python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev npm
+          sudo -E apt -y install ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential bzip2 ccache cmake cpio curl device-tree-compiler flex gawk gcc-multilib g++-multilib gettext genisoimage git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev libgmp3-dev libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev libssl-dev libtool lrzsz msmtp ninja-build p7zip p7zip-full patch pkgconf python3 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion swig texinfo uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev npm
+          sudo -E apt -y install clang-14 llvm-14 lld-14
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-14 100
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-14 100
+          sudo update-alternatives --install /usr/bin/llvm-strip llvm-strip /usr/bin/llvm-strip-14 100
           sudo npm install -g pnpm
           sudo -E systemctl daemon-reload
           sudo -E apt -y autoremove --purge
@@ -44,7 +48,6 @@ jobs:
 
       - name: Update Feeds & Golang
         run: |
-          # 1. 注入 passwall-packages, mosdns 与 openclash 源
           echo 'src-git passwall_pkg https://github.com/xiaorouji/openwrt-passwall-packages.git;main' >> ./feeds.conf.default
           echo 'src-git mosdns https://github.com/sbwml/luci-app-mosdns.git;v5' >> ./feeds.conf.default
           echo 'src-git openclash https://github.com/vernesong/OpenClash.git;master' >> ./feeds.conf.default
@@ -52,11 +55,11 @@ jobs:
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
           ./scripts/feeds update -a
 
-          # 2. 替换为最新的 Go 24.x 编译环境
+          # 替换为最新的 Go 24.x 编译环境
           rm -rf feeds/packages/lang/golang
           git clone --depth 1 https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
 
-          # 3. 运行 DIY 脚本（克隆独立包至 package 目录，以便被 feeds install 完整索引）
+          # 运行 DIY 脚本
           [ -e diy.sh ] && chmod +x diy.sh && ./diy.sh
 
           ./scripts/feeds install -a
